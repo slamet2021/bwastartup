@@ -3,7 +3,6 @@ package main
 import (
 	"bwastartup/handler"
 	"bwastartup/user"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -39,17 +38,31 @@ func main() {
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
 
-	// Pengecekan login
-	userByEmail, err := userRepository.FindByEmail("agung@email.com")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	//	input := user.LoginInput{
+	//		Email:    "agung@email.com",
+	//		Password: "password,
+	//	}
 
-	if userByEmail.ID == 0 {
-		fmt.Println("User tidak ditemukan")
-	} else {
-		fmt.Println(userByEmail.Name)
-	}
+	//	user, err := userService.Login(input)
+	//	if err != nil {
+	//		fmt.Println("Terjadi kesalahan")
+	//		fmt.Println(err.Error())
+	//	}
+
+	//	fmt.Println(user.Email)
+	//	fmt.Println(user.Name)
+
+	// Pengecekan login
+	//	userByEmail, err := userRepository.FindByEmail("agung@email.com")
+	//	if err != nil {
+	//		fmt.Println(err.Error())
+	//	}
+
+	//	if userByEmail.ID == 0 {
+	//		fmt.Println("User tidak ditemukan")
+	//	} else {
+	//		fmt.Println(userByEmail.Name)
+	//	}
 
 	// Route
 	userHandler := handler.NewUserHandler(userService)
@@ -58,6 +71,8 @@ func main() {
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
+	api.POST("/sessions", userHandler.Login)
+	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 
 	router.Run()
 
